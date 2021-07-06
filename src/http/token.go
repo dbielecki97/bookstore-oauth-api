@@ -2,17 +2,19 @@ package http
 
 import (
 	"github.com/dbielecki97/bookstore-oauth-api/src/domain/token"
+	"github.com/dbielecki97/bookstore-oauth-api/src/utils/errors"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 type Handler interface {
 	GetById(*gin.Context)
+	Create(*gin.Context)
+	UpdateExpiration(*gin.Context)
 }
 
 type handler struct {
 	service token.Service
-	router  *gin.Engine
 }
 
 func NewHandler(service token.Service) Handler {
@@ -28,4 +30,24 @@ func (h handler) GetById(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, t)
+}
+
+func (h handler) Create(c *gin.Context) {
+	var t token.Token
+	if err := c.ShouldBindJSON(&t); err != nil {
+		restErr := errors.NewBadRequestError("invalid json body")
+		c.JSON(restErr.StatusCode, restErr)
+		return
+	}
+
+	if err := h.service.CreateToken(t); err != nil {
+		c.JSON(err.StatusCode, err)
+		return
+	}
+
+	c.JSON(http.StatusCreated, t)
+}
+
+func (h handler) UpdateExpiration(c *gin.Context) {
+	panic("implement me")
 }

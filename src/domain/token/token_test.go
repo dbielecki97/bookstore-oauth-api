@@ -19,7 +19,7 @@ func TestGetNewAccessToken(t *testing.T) {
 }
 
 func TestAccessTokenIsExpired(t *testing.T) {
-	at := AccessToken{}
+	at := Token{}
 
 	assert.True(t, at.IsExpired(), "empty access token should be expired by default")
 
