@@ -2,7 +2,7 @@ package token
 
 import (
 	"github.com/dbielecki97/bookstore-oauth-api/src/repository/rest"
-	"github.com/dbielecki97/bookstore-oauth-api/src/utils/errors"
+	"github.com/dbielecki97/bookstore-utils-go/errors"
 	"strings"
 )
 

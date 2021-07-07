@@ -3,7 +3,7 @@ package cassandra
 import (
 	"fmt"
 	"github.com/dbielecki97/bookstore-oauth-api/src/domain/token"
-	"github.com/dbielecki97/bookstore-oauth-api/src/utils/errors"
+	"github.com/dbielecki97/bookstore-utils-go/errors"
 	"github.com/gocql/gocql"
 )
 

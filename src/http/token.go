@@ -2,7 +2,7 @@ package http
 
 import (
 	"github.com/dbielecki97/bookstore-oauth-api/src/domain/token"
-	"github.com/dbielecki97/bookstore-oauth-api/src/utils/errors"
+	"github.com/dbielecki97/bookstore-utils-go/errors"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

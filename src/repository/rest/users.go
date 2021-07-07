@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/dbielecki97/bookstore-oauth-api/src/domain/user"
-	"github.com/dbielecki97/bookstore-oauth-api/src/utils/errors"
+	"github.com/dbielecki97/bookstore-utils-go/errors"
 	"github.com/go-resty/resty/v2"
 	"net/http"
 	"time"

@@ -2,8 +2,8 @@ package token
 
 import (
 	"fmt"
-	"github.com/dbielecki97/bookstore-oauth-api/src/utils/crypto"
-	"github.com/dbielecki97/bookstore-oauth-api/src/utils/errors"
+	"github.com/dbielecki97/bookstore-utils-go/crypto"
+	"github.com/dbielecki97/bookstore-utils-go/errors"
 	"strings"
 	"time"
 )

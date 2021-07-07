@@ -2,7 +2,7 @@ package rest
 
 import (
 	"github.com/dbielecki97/bookstore-oauth-api/src/domain/user"
-	"github.com/dbielecki97/bookstore-oauth-api/src/utils/errors"
+	"github.com/dbielecki97/bookstore-utils-go/errors"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 	"net/http"
