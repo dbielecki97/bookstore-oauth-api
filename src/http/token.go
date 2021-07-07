@@ -33,14 +33,15 @@ func (h handler) GetById(c *gin.Context) {
 }
 
 func (h handler) Create(c *gin.Context) {
-	var t token.Token
-	if err := c.ShouldBindJSON(&t); err != nil {
+	var r token.Request
+	if err := c.ShouldBindJSON(&r); err != nil {
 		restErr := errors.NewBadRequestError("invalid json body")
 		c.JSON(restErr.StatusCode, restErr)
 		return
 	}
 
-	if err := h.service.CreateToken(t); err != nil {
+	t, err := h.service.CreateToken(r)
+	if err != nil {
 		c.JSON(err.StatusCode, err)
 		return
 	}

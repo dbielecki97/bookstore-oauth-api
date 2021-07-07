@@ -14,14 +14,15 @@ const (
 )
 
 var (
-	session      *gocql.Session
-	user         = os.Getenv(cassandraUser)
-	password     = os.Getenv(cassandraPass)
-	clusterHosts = strings.Split(os.Getenv(cassandraCluster), ",")
-	keyspace     = os.Getenv(cassandraKeyspace)
+	session *gocql.Session
 )
 
 func init() {
+	user := os.Getenv(cassandraUser)
+	password := os.Getenv(cassandraPass)
+	clusterHosts := strings.Split(os.Getenv(cassandraCluster), ",")
+	keyspace := os.Getenv(cassandraKeyspace)
+
 	cluster := gocql.NewCluster(clusterHosts...)
 	cluster.Keyspace = keyspace
 	cluster.Consistency = gocql.Quorum

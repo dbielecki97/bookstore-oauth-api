@@ -34,7 +34,7 @@ func (r cassandraRepository) GetById(id string) (*token.Token, *errors.RestErr) 
 	return &t, nil
 }
 
-func (r cassandraRepository) Create(t token.Token) *errors.RestErr {
+func (r cassandraRepository) Create(t *token.Token) *errors.RestErr {
 	err := r.session.Query(createToken, t.ID, t.UserId, t.ClientId, t.Expires).Exec()
 	if err != nil {
 		return errors.NewInternalServerError(err.Error())
