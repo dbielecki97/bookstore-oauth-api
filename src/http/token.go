@@ -1,8 +1,10 @@
 package http
 
 import (
+	"errors"
 	"github.com/dbielecki97/bookstore-oauth-api/src/domain/token"
-	"github.com/dbielecki97/bookstore-utils-go/errors"
+	"github.com/dbielecki97/bookstore-utils-go/errs"
+	"github.com/dbielecki97/bookstore-utils-go/logger"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -35,7 +37,7 @@ func (h handler) GetById(c *gin.Context) {
 func (h handler) Create(c *gin.Context) {
 	var r token.Request
 	if err := c.ShouldBindJSON(&r); err != nil {
-		restErr := errors.NewBadRequestError("invalid json body")
+		restErr := errs.NewBadRequestErr("invalid json body")
 		c.JSON(restErr.StatusCode, restErr)
 		return
 	}
@@ -50,5 +52,6 @@ func (h handler) Create(c *gin.Context) {
 }
 
 func (h handler) UpdateExpiration(c *gin.Context) {
-	panic("implement me")
+	c.JSON(http.StatusNotImplemented, map[string]interface{}{"info": "not implemented"})
+	logger.Error("used not implemented endpoint", errors.New(c.Request.RequestURI))
 }

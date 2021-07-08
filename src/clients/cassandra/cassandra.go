@@ -1,6 +1,7 @@
 package cassandra
 
 import (
+	"github.com/dbielecki97/bookstore-utils-go/logger"
 	"github.com/gocql/gocql"
 	"os"
 	"strings"
@@ -33,7 +34,7 @@ func init() {
 
 	var err error
 	if session, err = cluster.CreateSession(); err != nil {
-		panic(err)
+		logger.Fatal("could not create cassandra cluster session", err)
 	}
 
 }

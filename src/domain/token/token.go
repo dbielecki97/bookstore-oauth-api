@@ -3,7 +3,7 @@ package token
 import (
 	"fmt"
 	"github.com/dbielecki97/bookstore-utils-go/crypto"
-	"github.com/dbielecki97/bookstore-utils-go/errors"
+	"github.com/dbielecki97/bookstore-utils-go/errs"
 	"strings"
 	"time"
 )
@@ -15,9 +15,9 @@ const (
 )
 
 type Repository interface {
-	GetById(string) (*Token, *errors.RestErr)
-	Create(*Token) *errors.RestErr
-	UpdateExpirationTime(Token) *errors.RestErr
+	GetById(string) (*Token, *errs.RestErr)
+	Create(*Token) *errs.RestErr
+	UpdateExpirationTime(Token) *errs.RestErr
 }
 
 type Request struct {
@@ -31,14 +31,14 @@ type Request struct {
 	ClientSecret string `json:"client_secret,omitempty"`
 }
 
-func (r Request) Validate() *errors.RestErr {
+func (r Request) Validate() *errs.RestErr {
 	switch r.GrantType {
 	case grantTypePassword:
 		return nil
 	case grantTypeClientCredentials:
 		return nil
 	default:
-		return errors.NewBadRequestError("invalid grant type")
+		return errs.NewBadRequestErr("invalid grant type")
 	}
 }
 
@@ -64,20 +64,20 @@ func (t *Token) IsExpired() bool {
 	return time.Unix(t.Expires, 0).Before(time.Now().UTC())
 }
 
-func (t *Token) Validate() *errors.RestErr {
+func (t *Token) Validate() *errs.RestErr {
 	t.ID = strings.TrimSpace(t.ID)
 
 	if t.ID == "" {
-		return errors.NewBadRequestError("invalid token id")
+		return errs.NewBadRequestErr("invalid token id")
 	}
 	if t.UserId <= 0 {
-		return errors.NewBadRequestError("invalid user id")
+		return errs.NewBadRequestErr("invalid user id")
 	}
 	if t.ClientId <= 0 {
-		return errors.NewBadRequestError("invalid client id")
+		return errs.NewBadRequestErr("invalid client id")
 	}
 	if t.Expires <= 0 {
-		return errors.NewBadRequestError("invalid expiration time")
+		return errs.NewBadRequestErr("invalid expiration time")
 	}
 
 	return nil

@@ -7,8 +7,8 @@ github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869/go.mod h1:Ekp36dR
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/dbielecki97/bookstore-utils-go v1.0.1 h1:hyB9TftChn9udO1aUNKhP8oPliQJ0NN/9/etCFBk5Xg=
-github.com/dbielecki97/bookstore-utils-go v1.0.1/go.mod h1:UjcfcPbOFctsVsAHfdg6itE4qDYG3M+p50Q7ubDIqFE=
+github.com/dbielecki97/bookstore-utils-go v1.0.5 h1:AsuQ50RLvgkyLorqkXzCRWZwirFQTsTvbujSq0uFgV4=
+github.com/dbielecki97/bookstore-utils-go v1.0.5/go.mod h1:UjcfcPbOFctsVsAHfdg6itE4qDYG3M+p50Q7ubDIqFE=
 github.com/gin-contrib/sse v0.1.0 h1:Y/yl/+YNO8GZSjAhjMsSuLt29uWRFHdHYUb5lYOV9qE=
 github.com/gin-contrib/sse v0.1.0/go.mod h1:RHrZQHXnP2xjPF+u1gW/2HnVO7nvIa9PG3Gm+fLHvGI=
 github.com/gin-gonic/gin v1.7.2 h1:Tg03T9yM2xa8j6I3Z3oqLaQRSmKvxPd6g/2HJ6zICFA=

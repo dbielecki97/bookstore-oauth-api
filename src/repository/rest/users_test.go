@@ -2,7 +2,7 @@ package rest
 
 import (
 	"github.com/dbielecki97/bookstore-oauth-api/src/domain/user"
-	"github.com/dbielecki97/bookstore-utils-go/errors"
+	"github.com/dbielecki97/bookstore-utils-go/errs"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -42,7 +42,7 @@ func TestLoginUserTimeoutFromApi(t *testing.T) {
 	_, apiErr := repository.LoginUser("email@gmail.com", "password")
 	assert.NotNil(t, apiErr)
 	assert.EqualValues(t, http.StatusInternalServerError, apiErr.StatusCode)
-	assert.EqualValues(t, "restclient error", apiErr.Message)
+	assert.EqualValues(t, "could not login user", apiErr.Message)
 }
 
 func TestLoginUserInvalidErrorInterface(t *testing.T) {
@@ -66,7 +66,7 @@ func TestLoginUserInvalidErrorInterface(t *testing.T) {
 
 func TestLoginUserInvalidLoginCredentials(t *testing.T) {
 	httpmock.Reset()
-	apiErr := errors.RestErr{
+	apiErr := errs.RestErr{
 		Message:    "invalid credentials",
 		StatusCode: http.StatusUnauthorized,
 		Error:      "unauthorized",

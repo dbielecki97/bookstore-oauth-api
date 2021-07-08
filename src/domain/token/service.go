@@ -1,15 +1,16 @@
 package token
 
 import (
+	"errors"
 	"github.com/dbielecki97/bookstore-oauth-api/src/repository/rest"
-	"github.com/dbielecki97/bookstore-utils-go/errors"
+	"github.com/dbielecki97/bookstore-utils-go/errs"
 	"strings"
 )
 
 type Service interface {
-	GetTokenById(string) (*Token, *errors.RestErr)
-	CreateToken(Request) (*Token, *errors.RestErr)
-	UpdateTokenExpiration(Token) *errors.RestErr
+	GetTokenById(string) (*Token, *errs.RestErr)
+	CreateToken(Request) (*Token, *errs.RestErr)
+	UpdateTokenExpiration(Token) *errs.RestErr
 }
 
 type service struct {
@@ -21,28 +22,28 @@ func NewService(tokenRepo Repository, restRepo rest.UsersRepository) Service {
 	return &service{tokenRepo: tokenRepo, restRepo: restRepo}
 }
 
-func (s *service) GetTokenById(id string) (*Token, *errors.RestErr) {
+func (s *service) GetTokenById(id string) (*Token, *errs.RestErr) {
 	id = strings.TrimSpace(id)
 	if len(id) == 0 {
-		return nil, errors.NewBadRequestError("invalid token id")
+		return nil, errs.NewBadRequestErr("invalid token id")
 	}
 
 	return s.tokenRepo.GetById(id)
 }
 
-func (s *service) CreateToken(r Request) (*Token, *errors.RestErr) {
+func (s *service) CreateToken(r Request) (*Token, *errs.RestErr) {
 	if err := r.Validate(); err != nil {
 		return nil, err
 	}
 
 	var token *Token
-	var err *errors.RestErr
+	var err *errs.RestErr
 
 	switch r.GrantType {
 	case grantTypePassword:
 		token, err = s.generateTokenFromPassword(r)
 	case grantTypeClientCredentials:
-		return nil, errors.NewInternalServerError("not implemented")
+		return nil, errs.NewInternalServerErr("error processing request", errors.New("not implemented"))
 	}
 	if err != nil {
 		return nil, err
@@ -56,7 +57,7 @@ func (s *service) CreateToken(r Request) (*Token, *errors.RestErr) {
 	return token, nil
 }
 
-func (s *service) generateTokenFromPassword(r Request) (*Token, *errors.RestErr) {
+func (s *service) generateTokenFromPassword(r Request) (*Token, *errs.RestErr) {
 	user, err := s.restRepo.LoginUser(r.Username, r.Password)
 	if err != nil {
 		return nil, err
@@ -67,7 +68,7 @@ func (s *service) generateTokenFromPassword(r Request) (*Token, *errors.RestErr)
 	return &token, nil
 }
 
-func (s *service) UpdateTokenExpiration(t Token) *errors.RestErr {
+func (s *service) UpdateTokenExpiration(t Token) *errs.RestErr {
 	if err := t.Validate(); err != nil {
 		return err
 	}

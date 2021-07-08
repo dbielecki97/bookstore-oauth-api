@@ -2,16 +2,16 @@ package rest
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/dbielecki97/bookstore-oauth-api/src/domain/user"
-	"github.com/dbielecki97/bookstore-utils-go/errors"
+	"github.com/dbielecki97/bookstore-utils-go/errs"
+	"github.com/dbielecki97/bookstore-utils-go/logger"
 	"github.com/go-resty/resty/v2"
 	"net/http"
 	"time"
 )
 
 type UsersRepository interface {
-	LoginUser(string, string) (*user.User, *errors.RestErr)
+	LoginUser(string, string) (*user.User, *errs.RestErr)
 }
 
 type usersRepository struct {
@@ -27,7 +27,7 @@ var (
 	}).SetHostURL("http://localhost:8080")
 )
 
-func (u usersRepository) LoginUser(email string, password string) (*user.User, *errors.RestErr) {
+func (u usersRepository) LoginUser(email string, password string) (*user.User, *errs.RestErr) {
 	lr := user.LoginRequest{
 		Email:    email,
 		Password: password,
@@ -35,15 +35,15 @@ func (u usersRepository) LoginUser(email string, password string) (*user.User, *
 
 	res, err := restClient.R().SetBody(lr).Post("/users/login")
 	if err != nil {
-		fmt.Println(err)
-		return nil, errors.NewInternalServerError("restclient error")
+		logger.Error("POST request failed", err)
+		return nil, errs.NewInternalServerErr("could not login user", err)
 	}
 
 	if res.StatusCode() > 299 {
-		var restErr errors.RestErr
+		var restErr errs.RestErr
 		err := json.Unmarshal(res.Body(), &restErr)
 		if err != nil {
-			return nil, errors.NewInternalServerError("invalid error interface when trying to login user")
+			return nil, errs.NewInternalServerErr("invalid error interface when trying to login user", err)
 		}
 		return nil, &restErr
 	}
@@ -51,7 +51,7 @@ func (u usersRepository) LoginUser(email string, password string) (*user.User, *
 	var usr user.User
 	err = json.Unmarshal(res.Body(), &usr)
 	if err != nil {
-		return nil, errors.NewInternalServerError("error when trying to unmarshal users response")
+		return nil, errs.NewInternalServerErr("error when trying to unmarshal users response", err)
 	}
 
 	return &usr, nil
