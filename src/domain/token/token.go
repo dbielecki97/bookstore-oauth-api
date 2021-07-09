@@ -15,9 +15,9 @@ const (
 )
 
 type Repository interface {
-	GetById(string) (*Token, *errs.RestErr)
-	Create(*Token) *errs.RestErr
-	UpdateExpirationTime(Token) *errs.RestErr
+	GetById(string) (*Token, errs.RestErr)
+	Create(*Token) errs.RestErr
+	UpdateExpirationTime(Token) errs.RestErr
 }
 
 type Request struct {
@@ -31,7 +31,7 @@ type Request struct {
 	ClientSecret string `json:"client_secret,omitempty"`
 }
 
-func (r Request) Validate() *errs.RestErr {
+func (r Request) Validate() errs.RestErr {
 	switch r.GrantType {
 	case grantTypePassword:
 		return nil
@@ -64,7 +64,7 @@ func (t *Token) IsExpired() bool {
 	return time.Unix(t.Expires, 0).Before(time.Now().UTC())
 }
 
-func (t *Token) Validate() *errs.RestErr {
+func (t *Token) Validate() errs.RestErr {
 	t.ID = strings.TrimSpace(t.ID)
 
 	if t.ID == "" {

@@ -11,7 +11,7 @@ import (
 )
 
 type UsersRepository interface {
-	LoginUser(string, string) (*user.User, *errs.RestErr)
+	LoginUser(string, string) (*user.User, errs.RestErr)
 }
 
 type usersRepository struct {
@@ -27,7 +27,7 @@ var (
 	}).SetHostURL("http://localhost:8080")
 )
 
-func (u usersRepository) LoginUser(email string, password string) (*user.User, *errs.RestErr) {
+func (u usersRepository) LoginUser(email string, password string) (*user.User, errs.RestErr) {
 	lr := user.LoginRequest{
 		Email:    email,
 		Password: password,
@@ -40,12 +40,11 @@ func (u usersRepository) LoginUser(email string, password string) (*user.User, *
 	}
 
 	if res.StatusCode() > 299 {
-		var restErr errs.RestErr
-		err := json.Unmarshal(res.Body(), &restErr)
+		restErr, err := errs.FromBytes(res.Body())
 		if err != nil {
 			return nil, errs.NewInternalServerErr("invalid error interface when trying to login user", err)
 		}
-		return nil, &restErr
+		return nil, restErr
 	}
 
 	var usr user.User

@@ -22,7 +22,7 @@ func New(session *gocql.Session) token.Repository {
 	return &cassandraRepository{session: session}
 }
 
-func (r cassandraRepository) GetById(id string) (*token.Token, *errs.RestErr) {
+func (r cassandraRepository) GetById(id string) (*token.Token, errs.RestErr) {
 	var t token.Token
 	if err := r.session.Query(getToken, id).Scan(&t.ID, &t.UserId, &t.ClientId, &t.Expires); err != nil {
 		if err == gocql.ErrNotFound {
@@ -35,7 +35,7 @@ func (r cassandraRepository) GetById(id string) (*token.Token, *errs.RestErr) {
 	return &t, nil
 }
 
-func (r cassandraRepository) Create(t *token.Token) *errs.RestErr {
+func (r cassandraRepository) Create(t *token.Token) errs.RestErr {
 	err := r.session.Query(createToken, t.ID, t.UserId, t.ClientId, t.Expires).Exec()
 	if err != nil {
 		logger.Error("could not create token", err)
@@ -45,7 +45,7 @@ func (r cassandraRepository) Create(t *token.Token) *errs.RestErr {
 	return nil
 }
 
-func (r cassandraRepository) UpdateExpirationTime(t token.Token) *errs.RestErr {
+func (r cassandraRepository) UpdateExpirationTime(t token.Token) errs.RestErr {
 	err := r.session.Query(updateExpirationTime, t.Expires, t.ID).Exec()
 	if err != nil {
 		logger.Error("could not set new expiration time", err)

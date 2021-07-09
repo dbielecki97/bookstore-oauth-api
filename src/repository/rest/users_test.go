@@ -41,8 +41,8 @@ func TestLoginUserTimeoutFromApi(t *testing.T) {
 
 	_, apiErr := repository.LoginUser("email@gmail.com", "password")
 	assert.NotNil(t, apiErr)
-	assert.EqualValues(t, http.StatusInternalServerError, apiErr.StatusCode)
-	assert.EqualValues(t, "could not login user", apiErr.Message)
+	assert.EqualValues(t, http.StatusInternalServerError, apiErr.StatusCode())
+	assert.EqualValues(t, "could not login user", apiErr.Message())
 }
 
 func TestLoginUserInvalidErrorInterface(t *testing.T) {
@@ -56,21 +56,17 @@ func TestLoginUserInvalidErrorInterface(t *testing.T) {
 	repository := usersRepository{}
 
 	_, restErr := repository.LoginUser("email@gmail.com", "password")
-	if restErr.StatusCode != http.StatusInternalServerError {
-		t.Errorf("expected 500, got %d", restErr.StatusCode)
+	if restErr.StatusCode() != http.StatusInternalServerError {
+		t.Errorf("expected 500, got %d", restErr.StatusCode())
 	}
-	if !strings.Contains(restErr.Message, "invalid error interface when trying to login user") {
+	if !strings.Contains(restErr.Message(), "invalid error interface when trying to login user") {
 		t.Errorf("invalid error has been thrown")
 	}
 }
 
 func TestLoginUserInvalidLoginCredentials(t *testing.T) {
 	httpmock.Reset()
-	apiErr := errs.RestErr{
-		Message:    "invalid credentials",
-		StatusCode: http.StatusUnauthorized,
-		Error:      "unauthorized",
-	}
+	apiErr := errs.NewRestErr("invalid credentials", http.StatusUnauthorized, "unauthorized", nil)
 
 	responder, err := httpmock.NewJsonResponder(http.StatusUnauthorized, apiErr)
 	if err != nil {
@@ -81,13 +77,13 @@ func TestLoginUserInvalidLoginCredentials(t *testing.T) {
 	repository := usersRepository{}
 
 	_, restErr := repository.LoginUser("email@gmail.com", "password")
-	if restErr.StatusCode != http.StatusUnauthorized {
-		t.Errorf("expected 401, got %d", restErr.StatusCode)
+	if restErr.StatusCode() != http.StatusUnauthorized {
+		t.Errorf("expected 401, got %d", restErr.StatusCode())
 	}
-	if !strings.Contains(restErr.Message, "invalid credentials") {
+	if !strings.Contains(restErr.Message(), "invalid credentials") {
 		t.Errorf("invalid error message")
 	}
-	if !strings.Contains(restErr.Error, "unauthorized") {
+	if !strings.Contains(restErr.Err(), "unauthorized") {
 		t.Errorf("invalid error")
 	}
 }
@@ -104,7 +100,7 @@ func TestLoginUserJsonResponseError(t *testing.T) {
 	repository := usersRepository{}
 
 	_, restErr := repository.LoginUser("email@gmail.com", "password")
-	if !strings.Contains(restErr.Message, "error when trying to unmarshal users response") {
+	if !strings.Contains(restErr.Message(), "error when trying to unmarshal users response") {
 		t.Errorf("expected an marshalling error, got %v", restErr)
 	}
 }
